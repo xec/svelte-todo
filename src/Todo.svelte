@@ -1,6 +1,8 @@
 <script>
   import { quintOut } from "svelte/easing";
   import { crossfade } from "svelte/transition";
+  import Icon from "svelte-awesome";
+  import { times, plus } from "svelte-awesome/icons";
 
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 200),
@@ -20,24 +22,16 @@
     }
   });
 
-  let uid = 1;
-  let todos = [];
-  // fetch state from localStorage (if any)
-  if (localStorage.todos) {
-    todos = JSON.parse(localStorage.todos);
-    uid = todos.reduce((p, c) => (c.id > p ? c.id : p), 0) + 1;
-    console.log(todos, uid);
-  }
-
-  function add(input) {
+  function add(e) {
+    e.preventDefault();
     const todo = {
       id: uid++,
       done: false,
-      description: input.value
+      description: inputValue
     };
 
     todos = [todo, ...todos];
-    input.value = "";
+    inputValue = "";
   }
 
   function remove(todo) {
@@ -45,17 +39,49 @@
   }
 
   function mark(todo, done) {
-    todo.done = done;
-    remove(todo);
-    todos = todos.concat(todo);
+    const index = todos.indexOf(todo);
+    todos[index].done = done;
   }
 
+  let inputValue = "";
+  let uid = 1;
+  let todos = [];
+
+  // load initial state from localStorage (if any)
+  if (localStorage.todos) {
+    todos = JSON.parse(localStorage.todos) || [];
+    uid = todos.reduce((p, c) => (c.id > p ? c.id : p), 0) + 1;
+  }
+
+  // keep localStorage synced with current state
   $: {
     localStorage.todos = JSON.stringify(todos);
   }
 </script>
 
 <style>
+  :root {
+    --todo-input-text: black;
+    --todo-input-bg: white;
+    --todo-input-border: none;
+    --todo-item-text: #333;
+    --todo-item-bg: hsl(240, 8%, 93%);
+    --todo-item-bg-hover: white;
+    --todo-item-border: 1px solid hsl(240, 8%, 70%);
+    --todo-item-done-bg: hsl(240, 8%, 98%);
+    --todo-item-done-border: 1px solid hsl(240, 8%, 90%);
+    --todo-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --todo-remove-bg: black;
+    --todo-remove-text: white;
+  }
+  .svelte-todo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+    max-width: 36em;
+    margin: 0 auto;
+    font-family: var(--todo-font-family);
+  }
   label {
     display: block;
   }
@@ -69,33 +95,19 @@
     border: 1px solid #ccc;
     border-radius: 2px;
   }
-  input:disabled {
-    color: #ccc;
-  }
   button {
-    color: #333;
-    background-color: #f4f4f4;
-    outline: none;
+    user-select: none;
   }
-  button:disabled {
-    color: #999;
-  }
-  button:not(:disabled):active {
-    background-color: #ddd;
-  }
-  button:focus {
-    border-color: #666;
-  }
-  .board {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1em;
-    max-width: 36em;
-    margin: 0 auto;
-  }
-  .board > input {
+  .svelte-todo > form {
     font-size: 1.4em;
     grid-column: 1/3;
+    display: flex;
+  }
+  .svelte-todo > form > button {
+    flex-grow: 1;
+  }
+  .svelte-todo > form > input {
+    flex-grow: 5;
   }
   h2 {
     font-size: 2em;
@@ -103,59 +115,82 @@
     user-select: none;
     margin: 0 0 0.5em 0;
   }
-  label {
+  .todo-item {
     position: relative;
     line-height: 1.2;
     padding: 0.5em 2.5em 0.5em 2em;
     margin: 0 0 0.5em 0;
     border-radius: 2px;
     user-select: none;
-    border: 1px solid hsl(240, 8%, 70%);
-    background-color: hsl(240, 8%, 93%);
-    color: #333;
+    border: var(--todo-item-border);
+    background-color: var(--todo-item-bg);
+    color: var(--todo-item-text);
   }
-  input[type="checkbox"] {
+  .todo-item:hover {
+    background-color: var(--todo-item-bg-hover);
+  }
+  .todo-item input[type="checkbox"] {
     position: absolute;
     left: 0.5em;
-    top: 0.6em;
+    top: 0.7em;
     margin: 0;
   }
   .done {
-    border: 1px solid hsl(240, 8%, 90%);
-    background-color: hsl(240, 8%, 98%);
+    border: var(--todo-item-done-border);
+    background-color: var(--todo-item-done-bg);
   }
-  button {
+  .removeButton {
     position: absolute;
-    top: 0;
-    right: 0.2em;
-    width: 2em;
-    height: 100%;
-    background: no-repeat 50% 50%
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23676778' d='M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M17,7H14.5L13.5,6H10.5L9.5,7H7V9H17V7M9,18H15A1,1 0 0,0 16,17V10H8V17A1,1 0 0,0 9,18Z'%3E%3C/path%3E%3C/svg%3E");
-    background-size: 1.4em 1.4em;
+    top: 0.25rem;
+    right: 0.45rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    color: var(--todo-remove-text);
+    background: var(--todo-remove-bg);
+    border-radius: 5rem;
     border: none;
-    opacity: 0;
+    opacity: 0.5;
     transition: opacity 0.2s;
-    text-indent: -9999px;
     cursor: pointer;
+    font-size: 0.7em;
   }
-  label:hover button {
+
+  .removeButton:hover,
+  .removeButton:focus {
     opacity: 1;
   }
 </style>
 
-<div class="board">
-  <input
-    placeholder="what needs to be done?"
-    on:keydown={e => e.which === 13 && add(e.target)} />
+<div class="svelte-todo">
+  <form on:submit={add}>
+    <!-- svelte-ignore a11y-autofocus -->
+    <input
+      autofocus
+      class="svelte-todo-input"
+      placeholder="what needs to be done?"
+      bind:value={inputValue}
+      aria-label="what needs to be done?" />
+    <button disabled={!inputValue}>
+      <Icon data={plus} />
+      add
+    </button>
+  </form>
   {#if todos.length}
     <div class="left">
       <h2>todo</h2>
       {#each todos.filter(t => !t.done) as todo (todo.id)}
-        <label in:receive={{ key: todo.id }} out:send={{ key: todo.id }}>
+        <label
+          class="todo-item"
+          in:receive={{ key: todo.id }}
+          out:send={{ key: todo.id }}>
           <input type="checkbox" on:change={() => mark(todo, true)} />
           {todo.description}
-          <button on:click={() => remove(todo)}>remove</button>
+          <button
+            class="removeButton"
+            on:click={() => remove(todo)}
+            aria-label="Remove">
+            <Icon data={times} />
+          </button>
         </label>
       {/each}
     </div>
@@ -163,12 +198,17 @@
       <h2>done</h2>
       {#each todos.filter(t => t.done) as todo (todo.id)}
         <label
-          class="done"
+          class="todo-item done"
           in:receive={{ key: todo.id }}
           out:send={{ key: todo.id }}>
           <input type="checkbox" checked on:change={() => mark(todo, false)} />
           {todo.description}
-          <button on:click={() => remove(todo)}>remove</button>
+          <button
+            class="removeButton"
+            on:click={() => remove(todo)}
+            aria-label="Remove">
+            <Icon data={times} />
+          </button>
         </label>
       {/each}
     </div>
