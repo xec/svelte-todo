@@ -8,6 +8,7 @@ Simple Todo svelte component based on official svelte tutorial
 ## Get started
 
 Install from github until a version is published to npm repository
+
 ```bash
 npm i -D xec/svelte-todo
 ```
@@ -22,7 +23,7 @@ npm i -D xec/svelte-todo
 
 ## Contribute
 
-Fork this repo
+Clone/fork this repo
 
 ```bash
 npm i

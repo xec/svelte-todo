@@ -56,6 +56,36 @@
 </script>
 
 <style>
+  label {
+    display: block;
+  }
+  input,
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0.4em;
+    margin: 0 0 0.5em 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+  }
+  input:disabled {
+    color: #ccc;
+  }
+  button {
+    color: #333;
+    background-color: #f4f4f4;
+    outline: none;
+  }
+  button:disabled {
+    color: #999;
+  }
+  button:not(:disabled):active {
+    background-color: #ddd;
+  }
+  button:focus {
+    border-color: #666;
+  }
   .board {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -63,19 +93,16 @@
     max-width: 36em;
     margin: 0 auto;
   }
-
   .board > input {
     font-size: 1.4em;
     grid-column: 1/3;
   }
-
   h2 {
     font-size: 2em;
     font-weight: 200;
     user-select: none;
     margin: 0 0 0.5em 0;
   }
-
   label {
     position: relative;
     line-height: 1.2;
@@ -87,19 +114,16 @@
     background-color: hsl(240, 8%, 93%);
     color: #333;
   }
-
   input[type="checkbox"] {
     position: absolute;
     left: 0.5em;
     top: 0.6em;
     margin: 0;
   }
-
   .done {
     border: 1px solid hsl(240, 8%, 90%);
     background-color: hsl(240, 8%, 98%);
   }
-
   button {
     position: absolute;
     top: 0;
@@ -115,7 +139,6 @@
     text-indent: -9999px;
     cursor: pointer;
   }
-
   label:hover button {
     opacity: 1;
   }
