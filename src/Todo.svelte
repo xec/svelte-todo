@@ -60,10 +60,10 @@
 </script>
 
 <style>
-  :root {
+  :global(:root) {
     --todo-input-text: black;
     --todo-input-bg: white;
-    --todo-input-border: none;
+    --todo-input-border: 1px solid #ccc;
     --todo-item-text: #333;
     --todo-item-bg: hsl(240, 8%, 93%);
     --todo-item-bg-hover: white;
@@ -92,11 +92,14 @@
     padding: 0.4em;
     margin: 0 0 0.5em 0;
     box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 2px;
   }
   button {
     user-select: none;
+  }
+  input {
+    border: var(--todo-input-border);
+    color: var(--todo-input-text);
+    background-color: var(--todo-input-bg);
   }
   .svelte-todo > form {
     font-size: 1.4em;
