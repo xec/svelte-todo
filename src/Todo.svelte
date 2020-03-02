@@ -1,6 +1,7 @@
 <script>
   import { quintOut } from "svelte/easing";
   import { crossfade } from "svelte/transition";
+  import { flip } from "svelte/animate";
   import Icon from "svelte-awesome";
   import { times, plus } from "svelte-awesome/icons";
 
@@ -183,7 +184,8 @@
         <label
           class="todo-item"
           in:receive={{ key: todo.id }}
-          out:send={{ key: todo.id }}>
+          out:send={{ key: todo.id }}
+          animate:flip={{ duration: 200 }}>
           <input type="checkbox" on:change={() => mark(todo, true)} />
           {todo.description}
           <button
@@ -201,7 +203,8 @@
         <label
           class="todo-item done"
           in:receive={{ key: todo.id }}
-          out:send={{ key: todo.id }}>
+          out:send={{ key: todo.id }}
+          animate:flip={{ duration: 200 }}>
           <input type="checkbox" checked on:change={() => mark(todo, false)} />
           {todo.description}
           <button
