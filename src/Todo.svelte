@@ -1,6 +1,7 @@
 <script>
   import { quintOut } from "svelte/easing";
   import { crossfade } from "svelte/transition";
+  import { flip } from "svelte/animate";
   import Icon from "svelte-awesome";
   import { times, plus } from "svelte-awesome/icons";
 
@@ -70,7 +71,8 @@
     --todo-item-border: 1px solid hsl(240, 8%, 70%);
     --todo-item-done-bg: hsl(240, 8%, 98%);
     --todo-item-done-border: 1px solid hsl(240, 8%, 90%);
-    --todo-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --todo-font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana,
+      sans-serif;
     --todo-remove-bg: black;
     --todo-remove-text: white;
   }
@@ -185,7 +187,8 @@
         <label
           class="todo-item"
           in:receive={{ key: todo.id }}
-          out:send={{ key: todo.id }}>
+          out:send={{ key: todo.id }}
+          animate:flip={{ duration: 200 }}>
           <input type="checkbox" on:change={() => mark(todo, true)} />
           {todo.description}
           <button
@@ -203,7 +206,8 @@
         <label
           class="todo-item done"
           in:receive={{ key: todo.id }}
-          out:send={{ key: todo.id }}>
+          out:send={{ key: todo.id }}
+          animate:flip={{ duration: 200 }}>
           <input type="checkbox" checked on:change={() => mark(todo, false)} />
           {todo.description}
           <button
