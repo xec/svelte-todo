@@ -70,7 +70,8 @@
     --todo-item-border: 1px solid hsl(240, 8%, 70%);
     --todo-item-done-bg: hsl(240, 8%, 98%);
     --todo-item-done-border: 1px solid hsl(240, 8%, 90%);
-    --todo-font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --todo-font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana,
+      sans-serif;
     --todo-remove-bg: black;
     --todo-remove-text: white;
   }
