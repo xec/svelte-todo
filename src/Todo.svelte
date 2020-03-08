@@ -108,7 +108,7 @@
   button {
     user-select: none;
   }
-  input {
+  .svelte-todo-input {
     border: var(--todo-input-border);
     color: var(--todo-input-text);
     background-color: var(--todo-input-bg);
