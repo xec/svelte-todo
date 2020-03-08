@@ -197,7 +197,7 @@
         <label
           class="todo-item"
           in:receive={{ key: todo.id }}
-          out:send={{ key: todo.id }}
+          out:send|local={{ key: todo.id }}
           animate:flip={{ duration: 200 }}>
           <input type="checkbox" on:change={() => mark(todo, true)} />
           {todo.description}
@@ -216,7 +216,7 @@
         <label
           class="todo-item done"
           in:receive={{ key: todo.id }}
-          out:send={{ key: todo.id }}
+          out:send|local={{ key: todo.id }}
           animate:flip={{ duration: 200 }}>
           <input type="checkbox" checked on:change={() => mark(todo, false)} />
           {todo.description}
