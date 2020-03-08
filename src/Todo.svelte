@@ -28,11 +28,17 @@
     const todo = {
       id: uid++,
       done: false,
-      description: inputValue
+      description: inputValue,
+      tab: activetab
     };
 
     todos = [todo, ...todos];
     inputValue = "";
+  }
+
+  function addTab(tabName) {
+    tabs = [...tabs, tabName];
+    activetab = tabName;
   }
 
   function remove(todo) {
@@ -47,16 +53,20 @@
   let inputValue = "";
   let uid = 1;
   let todos = [];
+  let tabs = [];
+  let activetab;
 
   // load initial state from localStorage (if any)
-  if (localStorage.todos) {
-    todos = JSON.parse(localStorage.todos) || [];
+  if (localStorage.todoData) {
+    let vm = JSON.parse(localStorage.todoData) || [];
+    todos = vm.todos;
+    tabs = vm.tabs;
     uid = todos.reduce((p, c) => (c.id > p ? c.id : p), 0) + 1;
   }
 
   // keep localStorage synced with current state
   $: {
-    localStorage.todos = JSON.stringify(todos);
+    localStorage.todoData = JSON.stringify({todos, tabs});
   }
 </script>
 
