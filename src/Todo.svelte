@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import { quintOut } from "svelte/easing";
   import { crossfade } from "svelte/transition";
   import { flip } from "svelte/animate";
@@ -57,15 +58,19 @@
   let activetab;
 
   // load initial state from localStorage (if any)
-  if (localStorage.todoData) {
-    let vm = JSON.parse(localStorage.todoData) || [];
-    todos = vm.todos;
-    tabs = vm.tabs;
-    uid = todos.reduce((p, c) => (c.id > p ? c.id : p), 0) + 1;
-  }
+  onMount(async () => {
+    if (typeof window !== 'undefined' && localStorage.todoData) {
+      let vm = JSON.parse(localStorage.todoData) || {};
+      if (vm.todos) {
+        todos = vm.todos;
+        uid = todos.reduce((p, c) => (c.id > p ? c.id : p), 0) + 1;
+      }
+      if (vm.tabs) tabs = vm.tabs;
+    }
+  })
 
   // keep localStorage synced with current state
-  $: {
+  $: if (typeof window !== 'undefined' && window.localStorage) {
     localStorage.todoData = JSON.stringify({todos, tabs});
   }
 </script>
