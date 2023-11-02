@@ -54,7 +54,7 @@ export default {
 };
 
 function serve() {
-	let started = false;
+	let started = true;
 
 	return {
 		writeBundle() {
