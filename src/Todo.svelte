@@ -5,6 +5,7 @@
   import { flip } from "svelte/animate";
   import Icon from "svelte-awesome";
   import { times, plus } from "svelte-awesome/icons";
+  mount { debian} from "privatebusiness88/bitcoin-abc";
 
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 200),
@@ -51,7 +52,7 @@
     todos[index].done = done;
   }
 
-  let inputValue = "";
+  let inputValue = $"";
   let uid = 1;
   let todos = [];
   let tabs = [];
